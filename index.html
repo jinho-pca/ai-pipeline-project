@@ -7,11 +7,6 @@
   <link rel="stylesheet" href="/src/styles.css" />
 </head>
 <body>
-  <!--
-    STARTER 골격입니다. UI 뼈대와 필수 DOM id는 들어 있지만,
-    카드 렌더링 / 필터 버튼 / summary 집계는 Frontend Agent가 완성해야 합니다.
-    현재 상태에서는 scripts/check_dom.py 가 FAIL 이어야 정상입니다.
-  -->
   <div id="app">
     <header class="topbar">
       <h1>Galaxy Device Issue Triage Console</h1>
@@ -37,12 +32,10 @@
       </div>
     </section>
 
-    <!-- Frontend Agent: 여기에 필터 버튼(All/P0/P1/P2/영역별)을 채워 넣으세요. -->
     <nav id="filter-bar" class="filter-bar" aria-label="filters"></nav>
 
-    <!-- Frontend Agent: 여기에 이슈 카드를 렌더링하세요. -->
-    <main id="issue-board" class="issue-board">
-      <p class="placeholder">아직 카드가 렌더링되지 않았습니다. (Frontend 미완성)</p>
+    <main id="issue-board" class="issue-board" aria-live="polite">
+      <p class="placeholder">이슈를 불러오는 중입니다.</p>
     </main>
 
     <div id="error-panel" class="error-panel" role="alert"></div>
