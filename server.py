@@ -48,20 +48,60 @@ OWNER_BY_AREA = {
 
 
 def classify_issue(issue):
-    """STARTER STUB - intentionally incomplete.
+    """Classify one issue using the task_003 acceptance rules."""
+    area = issue.get("area")
+    severity = issue.get("severity")
+    repro_rate = issue.get("reproRate", 0)
+    impact_scope = issue.get("impactScope")
 
-    Backend Agent (task_003_backend) must implement the full rules described
-    in tasks/acceptance.json so that scripts/check_api.py passes.
-    Right now every issue is forced to P2 with the minimum fields, so the
-    API check is expected to FAIL until this function is completed.
-    """
+    reasons = []
+    if severity == "High" and impact_scope in ("System", "Multi-device"):
+        priority = "P0"
+        reasons.append("High severity with broad impact")
+    elif repro_rate >= 70 and area in CRITICAL_AREAS:
+        priority = "P0"
+        reasons.append("High reproduction rate in a critical area")
+    elif severity == "Medium":
+        priority = "P1"
+        reasons.append("Medium severity")
+    elif repro_rate >= 40:
+        priority = "P1"
+        reasons.append("Reproduction rate is at least 40 percent")
+    elif impact_scope == "App-wide":
+        priority = "P1"
+        reasons.append("App-wide impact")
+    else:
+        priority = "P2"
+        reasons.append("No P0 or P1 rule matched")
+
+    required_tests = ["Smoke"]
+    if priority in ("P0", "P1"):
+        required_tests.append("Regression")
+    if impact_scope == "Multi-device":
+        required_tests.append("Device Matrix")
+
+    area_test = {
+        "Camera": "Camera Smoke",
+        "Battery": "Battery Drain",
+        "Connectivity": "Reconnect",
+        "Foldable UX": "Foldable Layout",
+    }.get(area)
+    if area_test:
+        required_tests.append(area_test)
+
+    # Preserve rule order while guaranteeing uniqueness.
+    required_tests = list(dict.fromkeys(required_tests))
+    owner_review = priority == "P0" or (
+        priority == "P1" and area in CRITICAL_AREAS
+    )
+
     return {
         "id": issue.get("id"),
-        "priority": "P2",
-        "requiredTests": ["Smoke"],
-        "ownerReview": False,
-        "owner": "",
-        "reasons": ["TODO: classify_issue is not implemented yet"],
+        "priority": priority,
+        "requiredTests": required_tests,
+        "ownerReview": owner_review,
+        "owner": OWNER_BY_AREA.get(area, ""),
+        "reasons": reasons,
     }
 
 
