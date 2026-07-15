@@ -1,9 +1,4 @@
-/* Galaxy Device Issue Triage Console - styles (STARTER)
- *
- * 기본 레이아웃만 제공합니다. 외부 폰트 / CDN / 프레임워크를 쓰지 않습니다.
- * Frontend Agent 가 카드 스타일과 P0 강조용 클래스를 완성해야 합니다.
- * 현재 상태에서는 P0 강조 클래스가 없어 scripts/check_dom.py 가 FAIL 이어야 정상입니다.
- */
+/* Galaxy Device Issue Triage Console - styles */
 
 :root {
   --bg: #0f1220;
@@ -56,11 +51,73 @@ body {
   margin-bottom: 20px;
 }
 
+.filter-button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 13px;
+  background: var(--panel);
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+}
+
+.filter-button:hover { border-color: var(--p2); color: var(--text); }
+.filter-button:focus-visible { outline: 2px solid var(--p2); outline-offset: 2px; }
+.filter-button[aria-pressed="true"] {
+  border-color: var(--p2);
+  background: #203759;
+  color: var(--text);
+}
+
 .issue-board {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 14px;
 }
+
+.card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--p2);
+  border-radius: 12px;
+  padding: 16px;
+  background: var(--panel);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+}
+
+.card-p0 {
+  border-color: var(--p0);
+  background: linear-gradient(145deg, rgb(255 90 110 / 12%), var(--panel) 42%);
+  box-shadow: 0 8px 26px rgb(255 90 110 / 16%);
+}
+
+.card-p1 { border-top-color: var(--p1); }
+.card-p2 { border-top-color: var(--p2); }
+
+.card-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.priority { border-radius: 6px; padding: 3px 8px; font-size: 12px; font-weight: 800; color: #111522; }
+.priority-p0 { background: var(--p0); }
+.priority-p1 { background: var(--p1); }
+.priority-p2 { background: var(--p2); }
+.issue-id { color: var(--muted); font: 12px ui-monospace, "Cascadia Code", monospace; }
+.card-title { margin: 12px 0 14px; font-size: 18px; line-height: 1.35; }
+
+.card-meta {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 5px 12px;
+  margin: 0;
+  font-size: 13px;
+}
+.card-meta dt { color: var(--muted); }
+.card-meta dd { margin: 0; overflow-wrap: anywhere; }
+
+.tests { margin-top: 16px; }
+.tests-label { color: var(--muted); font-size: 12px; }
+.test-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.test-chip { border: 1px solid var(--line); border-radius: 6px; padding: 3px 7px; font-size: 12px; }
+.review-badge { margin: 14px 0 0; color: var(--p1); font-size: 13px; font-weight: 700; }
 
 .placeholder { color: var(--muted); }
 
@@ -70,9 +127,12 @@ body {
   min-height: 20px;
 }
 
-/* TODO(Frontend Agent):
- *   - 이슈 카드 기본 스타일
- *   - P0 카드 강조용 클래스 (클래스명은 tasks/acceptance.json 의 p0HighlightClass 값 사용)
- *   - 필터 버튼 스타일
- *   check_dom.py 는 위 P0 강조 클래스 선택자가 이 파일에 있는지 확인합니다.
- */
+@media (max-width: 700px) {
+  #app { padding: 16px; }
+  .summary { grid-template-columns: repeat(2, 1fr); }
+  .issue-board { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 400px) {
+  .summary { grid-template-columns: 1fr; }
+}
